@@ -1,11 +1,13 @@
-from django.db.models.fields import CharField
+from django.db.models.fields import Field
+
+from .forms import EnumField
 
 
-class EnumChoiceField(CharField):
+class EnumChoiceField(Field):
     """
     A field that generates choices from an ``enum.Enum``.
 
-    The ``EnumChoiceField`` extends ``CharField``, and the chosen enum value is
+    The ``EnumChoiceField`` extends ``Field``, and the chosen enum value is
     stored in the database using the Enums ``name`` attributes. This keeps the
     database representation stable when adding and removing enum values.
 
@@ -29,9 +31,8 @@ class EnumChoiceField(CharField):
 
     def __init__(self, enum_class, *args, **kwargs):
         self.enum = enum_class
-        choices = [(item.name, str(item)) for item in enum_class]
         kwargs.setdefault('max_length', max(len(item.name) for item in enum_class))
-        super().__init__(*args, choices=choices, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def from_db_value(self, value, expression, connection, context):
         """
@@ -64,3 +65,17 @@ class EnumChoiceField(CharField):
         kwargs['enum_class'] = self.enum
         del kwargs['choices']
         return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        def form_class(**kwargs):
+            return EnumField(**kwargs)
+        defaults = {
+            'form_class': form_class,
+            'enum': self.enum,
+        }
+        defaults.update(kwargs)
+        out = super().formfield(**defaults)
+        return out
+
+    def get_internal_type(self):
+        return "CharField"

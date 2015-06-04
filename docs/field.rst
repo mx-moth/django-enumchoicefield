@@ -10,11 +10,12 @@ EnumChoiceField
 
     Create an EnumChoiceField. This field generates choices from an ``enum.Enum``.
 
-    The ``EnumChoiceField`` extends ``CharField``. It accepts one additional
-    argument above ``CharField``: ``enum_class``, which should be a subclass of
-    :class:`~enum.Enum`. A ``choices`` list is automatically generated for you
-    from all values of this Enum. It is recommended that this Enum subclasses
-    :class:`~enumchoicefield.enum.ChoiceEnum``, but this is not required.
+    The ``EnumChoiceField`` extends ``Field``.
+    It accepts one additional argument:
+    ``enum_class``, which should be a subclass of :class:`~enum.Enum`.
+    It is recommended that this Enum subclasses
+    :class:`~enumchoicefield.enum.ChoiceEnum``,
+    but this is not required.
 
     When saving Enum choices to the database, The chosen enum value is stored
     in the database using its ``name`` attribute. This keeps the database

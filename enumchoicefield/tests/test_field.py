@@ -57,10 +57,3 @@ class EnumTestCase(TestCase):
         DefaultChoiceModel.objects.create()
         instance = DefaultChoiceModel.objects.get()
         self.assertEqual(instance.choice, MyEnum.baz)
-
-    def test_choices(self):
-        choices = ChoiceModel._meta.get_field('choice').choices
-        self.assertEqual(choices, [
-            ('foo', "Foo"),
-            ('bar', "Bar"),
-            ('baz', "Baz Quux")])

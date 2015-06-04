@@ -1,9 +1,9 @@
-from unittest import TestCase
+from django.test import SimpleTestCase
 
 from enumchoicefield.enum import PrettyEnum, DeconstructableEnum
 
 
-class EnumTests(TestCase):
+class EnumTests(SimpleTestCase):
 
     def test_pretty_enum(self):
         class MyEnum(PrettyEnum):
