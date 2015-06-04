@@ -63,7 +63,6 @@ class EnumChoiceField(Field):
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()
         kwargs['enum_class'] = self.enum
-        del kwargs['choices']
         return name, path, args, kwargs
 
     def formfield(self, **kwargs):

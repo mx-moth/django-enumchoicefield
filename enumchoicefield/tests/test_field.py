@@ -57,3 +57,10 @@ class EnumTestCase(TestCase):
         DefaultChoiceModel.objects.create()
         instance = DefaultChoiceModel.objects.get()
         self.assertEqual(instance.choice, MyEnum.baz)
+
+    def test_deconstruct(self):
+        self.assertEqual(
+            ChoiceModel._meta.get_field('choice').deconstruct(),
+            ('choice', 'enumchoicefield.fields.EnumChoiceField', [], {
+                'enum_class': MyEnum,
+                'max_length': 3}))
