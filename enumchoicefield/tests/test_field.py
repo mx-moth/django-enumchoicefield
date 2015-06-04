@@ -64,3 +64,20 @@ class EnumTestCase(TestCase):
             ('choice', 'enumchoicefield.fields.EnumChoiceField', [], {
                 'enum_class': MyEnum,
                 'max_length': 3}))
+
+
+class TestQuery(TestCase):
+    def setUp(self):
+        self.foo = ChoiceModel.objects.create(choice=MyEnum.foo)
+        self.bar = ChoiceModel.objects.create(choice=MyEnum.bar)
+        self.baz = ChoiceModel.objects.create(choice=MyEnum.baz)
+
+    def test_exact(self):
+        self.assertEqual(
+            self.foo,
+            ChoiceModel.objects.get(choice=MyEnum.foo))
+
+    def test_in(self):
+        self.assertQuerysetEqual(
+            ChoiceModel.objects.filter(choice__in=[MyEnum.bar, MyEnum.baz]),
+            [self.bar, self.baz], transform=lambda x: x)
