@@ -11,9 +11,9 @@ from django.utils.translation import gettext_lazy as _
 class EnumSelect(Widget):
     allow_multiple_selected = False
 
-    def __init__(self, enum, attrs=None):
+    def __init__(self, members=None, attrs=None):
         super(EnumSelect, self).__init__(attrs)
-        self.enum = enum
+        self.members = members
 
     def render(self, name, value, attrs=None):
 
@@ -31,7 +31,7 @@ class EnumSelect(Widget):
         if not self.is_required:
             options.append(self.render_option(selected_choices, None))
         options.extend(self.render_option(selected_choices, value)
-                       for value in self.enum)
+                       for value in self.members)
         return '\n'.join(options)
 
     def render_option(self, selected_choices, option):
@@ -55,23 +55,35 @@ class EnumSelect(Widget):
 
 class EnumField(Field):
     widget = EnumSelect
+    members = []
     empty_value = None
 
     default_error_messages = {
         'invalid_choice': _('Select a valid choice. %(value)s is not one of the available choices.'),
     }
 
-    def __init__(self, enum, *, widget=None, **kwargs):
+    def __init__(self, enum, members=None, *, widget=None, **kwargs):
         self.enum = enum
+
+        if members is None:
+            members = list(enum)
+        else:
+            members = list(members)
+
         if widget is None:
             widget = self.widget
         if isinstance(widget, type):
-            widget = widget(enum)
+            widget = widget(members)
+
+        self.members = members
+
         super().__init__(widget=widget, **kwargs)
 
     def prepare_value(self, value):
         if value is None:
             return None
+        if isinstance(value, str):
+            return value
         return value.name
 
     def to_python(self, value):
@@ -79,10 +91,26 @@ class EnumField(Field):
             return self.empty_value
 
         try:
-            return self.enum[value]
+            member = self.enum[value]
         except KeyError:
             raise ValidationError(
                 self.error_messages['invalid_choice'],
                 code='invalid_choice',
                 params={'value': value},
             )
+        if member not in self.members:
+            raise ValidationError(
+                self.error_messages['invalid_choice'],
+                code='invalid_choice',
+                params={'value': value},
+            )
+        return member
+
+    def _get_members(self):
+        return list(self._members)
+
+    def _set_members(self, members):
+        self._members = list(members)
+        self.widget.members = self._members
+
+    members = property(_get_members, _set_members)
