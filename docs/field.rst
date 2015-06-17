@@ -13,25 +13,28 @@ EnumChoiceField
     The ``EnumChoiceField`` extends ``Field``.
     It accepts one additional argument:
     ``enum_class``, which should be a subclass of :class:`~enum.Enum`.
-    It is recommended that this Enum subclasses
+    It is recommended that this enum subclasses
     :class:`~enumchoicefield.enum.ChoiceEnum``,
     but this is not required.
 
-    When saving Enum choices to the database, The chosen enum value is stored
+    When saving enum members to the database, The chosen member is stored
     in the database using its ``name`` attribute. This keeps the database
-    representation stable when adding and removing enum values.
+    representation stable when adding and removing enum members.
 
-    A ``max_length`` is automatically generated from the Enum ``name``
-    attributes. If you add a new, longer Enum value, or remove the longest Enum
-    value, the generated ``max_length`` will change. To prevent this, you can
-    supply a ``max_length`` as normal, and this will be used instead.
+    A ``max_length`` is automatically generated from the longest ``name``.
+    If you add a new enum member with a longer name, or remove the longest member,
+    the generated ``max_length`` will change.
+    To prevent this, you can manually set a ``max_length`` argument,
+    and this will be used instead.
 
-    If a default choice is supplied, the Enum class must have a ``deconstruct``
-    method. If your Enum inherits from
-    :class:`~enumchoicefield.enum.DeconstructableEnum`, this will be handled
-    for you.
+    If a default choice is supplied,
+    the enum class must have a ``deconstruct`` method.
+    If the enum inherits from :class:`~enumchoicefield.enum.DeconstructableEnum`,
+    this will be handled for you.
 
-    The display value for the Enums is taken from the ``str`` representation of
-    each value. By default this is something like ``MyEnum.foo``, which is not
-    very user friendly. :class:`~enumchoicefield.enum.PrettyEnum` makes
-    defining a human-readable ``str`` representation easy.
+    The display value for the Enums is taken from
+    the ``str`` representation of each value.
+    By default this is something like ``MyEnum.foo``,
+    which is not very user friendly.
+    :class:`~enumchoicefield.enum.PrettyEnum` makes defining
+    a human-readable ``str`` representation easy.

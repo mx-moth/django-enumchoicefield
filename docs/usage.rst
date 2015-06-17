@@ -17,12 +17,15 @@ The following code outlines the most simple usecase of ``EnumChoiceField``:
 
     class Profile(models.Model):
         name = models.CharField(max_length=100)
-        favourite_fruit = EnumChoiceField(Fruit)
+        favourite_fruit = EnumChoiceField(Fruit, default=Fruit.banana)
 
 
-Your enumerations should extend the :class:`~enumchoicefield.enum.ChoiceEnum` class.
-For each item in your enumeration, their human-readable name should be their value.
+    citrus_lovers = Profile.objects.filter(favourite_fruit=Fruit.orange)
+
+
+The enumerations should extend the :class:`~enumchoicefield.enum.ChoiceEnum` class.
+For each member in the enumeration, their human-readable name should be their value.
 This human-readable name will be used when presenting forms to the user.
 
 For more advanced usage, refer to the documentation on
-:doc:`/field` or :doc:`/enum`
+:doc:`/field`, :doc:`/enum`, or :doc:`/queries`.
