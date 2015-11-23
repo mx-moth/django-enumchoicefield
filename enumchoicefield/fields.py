@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 from django.db.models.fields import Field
 
 from .forms import EnumField
@@ -32,7 +34,7 @@ class EnumChoiceField(Field):
     def __init__(self, enum_class, *args, **kwargs):
         self.enum = enum_class
         kwargs.setdefault('max_length', max(len(item.name) for item in enum_class))
-        super().__init__(*args, **kwargs)
+        super(EnumChoiceField, self).__init__(*args, **kwargs)
 
     def from_db_value(self, value, expression, connection, context):
         """
@@ -61,7 +63,7 @@ class EnumChoiceField(Field):
         return value.name
 
     def deconstruct(self):
-        name, path, args, kwargs = super().deconstruct()
+        name, path, args, kwargs = super(EnumChoiceField, self).deconstruct()
         kwargs['enum_class'] = self.enum
         return name, path, args, kwargs
 

@@ -1,5 +1,7 @@
 from django.test import SimpleTestCase
 
+from django.utils import six
+
 from enumchoicefield.enum import PrettyEnum, DeconstructableEnum
 
 
@@ -17,11 +19,17 @@ class EnumTests(SimpleTestCase):
         self.assertEqual(str(MyEnum.baz), "Baz Quux")
 
         # Ensure values are automatically generated
-        self.assertEqual(MyEnum.foo.value, 1)
-        self.assertEqual(MyEnum.bar.value, 2)
-        self.assertEqual(MyEnum.baz.value, 3)
+        if six.PY3:
+            # In Python3, values are numbered in order
+            self.assertEqual(MyEnum.foo.value, 1)
+            self.assertEqual(MyEnum.bar.value, 2)
+            self.assertEqual(MyEnum.baz.value, 3)
 
-        self.assertEqual(MyEnum(2), MyEnum.bar)
+            self.assertEqual(MyEnum(2), MyEnum.bar)
+        else:
+            # In Python2, values are ordered arbitarily
+            self.assertEqual(
+                {1, 2, 3}, set(member.value for member in MyEnum))
 
     def test_extended_pretty_enum(self):
         class MyEnum(PrettyEnum):
@@ -30,7 +38,7 @@ class EnumTests(SimpleTestCase):
             baz = ("Baz Quux", 40)
 
             def __init__(self, name, number):
-                # TODO Work out if super() can be used through mad hack
+                # TODO Work out if super() can be used through mad haxs
                 PrettyEnum.__init__(self, name)
                 self.number = number
 

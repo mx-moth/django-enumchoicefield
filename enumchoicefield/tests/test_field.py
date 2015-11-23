@@ -1,7 +1,6 @@
 from django.test import TestCase
 
-from .models import (
-    ChoiceModel, NullableChoiceModel, DefaultChoiceModel, MyEnum)
+from .models import ChoiceModel, DefaultChoiceModel, MyEnum, NullableChoiceModel
 
 
 class EnumTestCase(TestCase):

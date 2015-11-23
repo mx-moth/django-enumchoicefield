@@ -62,7 +62,7 @@ class EnumField(Field):
         'invalid_choice': _('Select a valid choice. %(value)s is not one of the available choices.'),
     }
 
-    def __init__(self, enum, members=None, *, widget=None, **kwargs):
+    def __init__(self, enum, members=None, widget=None, **kwargs):
         self.enum = enum
 
         if members is None:
@@ -77,7 +77,7 @@ class EnumField(Field):
 
         self.members = members
 
-        super().__init__(widget=widget, **kwargs)
+        super(EnumField, self).__init__(widget=widget, **kwargs)
 
     def prepare_value(self, value):
         if value is None:
