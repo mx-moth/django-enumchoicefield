@@ -1,10 +1,10 @@
 from django.core.exceptions import ValidationError
 from django.forms.fields import Field
-from django.forms.widgets import Widget
 from django.forms.utils import flatatt
-
-from django.utils.html import format_html, mark_safe
+from django.forms.widgets import Widget
+from django.utils import six
 from django.utils.encoding import force_text
+from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
 
@@ -80,9 +80,9 @@ class EnumField(Field):
         super(EnumField, self).__init__(widget=widget, **kwargs)
 
     def prepare_value(self, value):
-        if value is None:
-            return None
-        if isinstance(value, str):
+        if value in self.empty_values:
+            return self.empty_value
+        if isinstance(value, six.string_types):
             return value
         return value.name
 

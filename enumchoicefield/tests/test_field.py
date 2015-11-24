@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from enumchoicefield.forms import EnumField
+
 from .models import ChoiceModel, DefaultChoiceModel, MyEnum, NullableChoiceModel
 
 
@@ -63,6 +65,12 @@ class EnumTestCase(TestCase):
             ('choice', 'enumchoicefield.fields.EnumChoiceField', [], {
                 'enum_class': MyEnum,
                 'max_length': 3}))
+
+    def test_formfield(self):
+        model_field = ChoiceModel._meta.get_field('choice')
+        form_field = model_field.formfield()
+        self.assertIsInstance(form_field, EnumField)
+        self.assertIs(form_field.enum, model_field.enum)
 
 
 class TestQuery(TestCase):
