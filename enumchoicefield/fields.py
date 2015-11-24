@@ -68,14 +68,12 @@ class EnumChoiceField(Field):
         return name, path, args, kwargs
 
     def formfield(self, **kwargs):
-        def form_class(**kwargs):
-            return EnumField(**kwargs)
         defaults = {
-            'form_class': form_class,
+            'form_class': EnumField,
             'enum': self.enum,
         }
         defaults.update(kwargs)
-        out = super().formfield(**defaults)
+        out = super(EnumChoiceField, self).formfield(**defaults)
         return out
 
     def get_internal_type(self):

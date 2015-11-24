@@ -1,5 +1,6 @@
 from django import forms
 from django.test import SimpleTestCase
+from django.utils import six
 
 from enumchoicefield.enum import PrettyEnum
 from enumchoicefield.forms import EnumField, EnumSelect
@@ -11,7 +12,20 @@ class MyEnum(PrettyEnum):
     baz = "Baz Quux"
 
 
-class TestEnumForms(SimpleTestCase):
+class SelectTestCase(SimpleTestCase):
+    def assertSelectOptions(self, html, options, name='choice'):
+        if six.PY3:
+            # Python3 enums have the correct order of options
+            select = '<select id="id_{name}" name="{name}">{options}</select>'.format(
+                name=name, options=''.join(options))
+            self.assertHTMLEqual(select, html)
+        else:
+            # Python2 enums have an arbitary order
+            for option in options:
+                self.assertInHTML(option, html)
+
+
+class TestEnumForms(SelectTestCase):
 
     class EnumForm(forms.Form):
         choice = EnumField(MyEnum)
@@ -23,13 +37,11 @@ class TestEnumForms(SimpleTestCase):
     def test_rendering(self):
         form = self.EnumForm()
         html = str(form['choice'])
-        self.assertHTMLEqual(html, '\n'.join([
-            '<select id="id_choice" name="choice">',
+        self.assertSelectOptions(html, [
             '<option value="foo">Foo</option>',
             '<option value="bar">Bar</option>',
             '<option value="baz">Baz Quux</option>',
-            '</select>',
-        ]))
+        ])
 
     def test_initial(self):
         form = self.EnumForm(initial={'choice': MyEnum.bar})
@@ -54,7 +66,7 @@ class TestEnumForms(SimpleTestCase):
         self.assertFalse(form.is_valid())
 
 
-class TestOptionalEnumForms(SimpleTestCase):
+class TestOptionalEnumForms(SelectTestCase):
 
     class EnumForm(forms.Form):
         choice = EnumField(MyEnum, required=False)
@@ -66,14 +78,12 @@ class TestOptionalEnumForms(SimpleTestCase):
     def test_rendering(self):
         form = self.EnumForm()
         html = str(form['choice'])
-        self.assertHTMLEqual(html, '\n'.join([
-            '<select id="id_choice" name="choice">',
+        self.assertSelectOptions(html, [
             '<option value="">---------</option>',
             '<option value="foo">Foo</option>',
             '<option value="bar">Bar</option>',
             '<option value="baz">Baz Quux</option>',
-            '</select>',
-        ]))
+        ])
 
     def test_initial(self):
         form = self.EnumForm(initial={'choice': MyEnum.bar})
@@ -96,7 +106,7 @@ class TestOptionalEnumForms(SimpleTestCase):
         self.assertEqual(form.cleaned_data['choice'], None)
 
 
-class TestComplicatedForm(SimpleTestCase):
+class TestComplicatedForm(SelectTestCase):
 
     class EnumForm(forms.Form):
         choice = EnumField(MyEnum)
@@ -111,28 +121,24 @@ class TestComplicatedForm(SimpleTestCase):
         form = self.EnumForm(data={'choice': 'bar', 'number': 'abc'})
         self.assertFalse(form.is_valid())
         html = str(form['choice'])
-        self.assertHTMLEqual(html, '\n'.join([
-            '<select id="id_choice" name="choice">',
+        self.assertSelectOptions(html, [
             '<option value="foo">Foo</option>',
             '<option value="bar" selected>Bar</option>',
             '<option value="baz">Baz Quux</option>',
-            '</select>',
-        ]))
+        ])
 
     def test_invalid_choice(self):
         form = self.EnumForm(data={'choice': 'nope', 'number': '10'})
         self.assertFalse(form.is_valid())
         html = str(form['choice'])
-        self.assertHTMLEqual(html, '\n'.join([
-            '<select id="id_choice" name="choice">',
+        self.assertSelectOptions(html, [
             '<option value="foo">Foo</option>',
             '<option value="bar">Bar</option>',
             '<option value="baz">Baz Quux</option>',
-            '</select>',
-        ]))
+        ])
 
 
-class TestLimitedMembers(SimpleTestCase):
+class TestLimitedMembers(SelectTestCase):
     members = [MyEnum.baz, MyEnum.foo]
 
     def setUp(self):
@@ -149,11 +155,11 @@ class TestLimitedMembers(SimpleTestCase):
     def test_limited_members(self):
         form = self.EnumForm()
         self.assertEqual(form['choice'].field.members, self.members)
-        self.assertHTMLEqual(str(form['choice']), "\n".join([
-            '<select name="choice" id="id_choice">',
-            '<option value="baz">Baz Quux</option>'
-            '<option value="foo">Foo</option>'
-            '</select>']))
+        html = str(form['choice'])
+        self.assertSelectOptions(html, [
+            '<option value="baz">Baz Quux</option>',
+            '<option value="foo">Foo</option>',
+        ])
 
     def test_invalid_choice(self):
         form = self.EnumForm({'choice': 'bar'})
@@ -162,8 +168,8 @@ class TestLimitedMembers(SimpleTestCase):
     def test_valid_choice(self):
         form = self.EnumForm({'choice': 'baz'})
         self.assertTrue(form.is_valid())
-        self.assertHTMLEqual(str(form['choice']), "\n".join([
-            '<select name="choice" id="id_choice">',
-            '<option value="baz" selected>Baz Quux</option>'
-            '<option value="foo">Foo</option>'
-            '</select>']))
+        html = str(form['choice'])
+        self.assertSelectOptions(html, [
+            '<option value="baz" selected>Baz Quux</option>',
+            '<option value="foo">Foo</option>',
+        ])
