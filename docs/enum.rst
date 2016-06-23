@@ -29,11 +29,13 @@ Enum classes
 
 .. class:: DeconstructableEnum
 
-    a :class:`DeconstructableEnum` defines a :func:`deconstruct` method,
-    compatible with Django migrations.
-    If you want to set a default for an
-    :class:`~enumchoicefield.fields.EnumChoiceField`,
-    the enum must be deconstructable.
+    .. py:method:: deconstruct()
+
+        a :class:`DeconstructableEnum` defines :meth:`deconstruct`,
+        compatible with Django migrations.
+        If you want to set a default for an
+        :class:`~enumchoicefield.fields.EnumChoiceField`,
+        the enum must be deconstructable.
 
 
 .. class:: ChoiceEnum
