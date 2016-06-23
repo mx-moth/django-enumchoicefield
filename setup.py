@@ -4,7 +4,7 @@ Install django-enumchoicefield using setuptools
 """
 import sys
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open('README.rst', 'r') as f:
     readme = f.read()
@@ -27,7 +27,7 @@ setup(
     long_description=readme,
     author='Tim Heap',
     author_email='tim@takeflight.com.au',
-    url='https://bitbucket.org/takeflight/django-enumchoicefield',
+    url='https://github.com/takeflight/django-enumchoicefield',
 
     install_requires=install_requires,
     zip_safe=False,
