@@ -27,7 +27,7 @@ The following queries demonstrate some of what is possible:
     banana_haters = Profile.objects.exclude(favourite_fruit=Fruit.banana)
 
     citrus_fans = Profile.objects.filter(
-        favourite_fruit__in[Fruit.orange, Fruit.lemon, Fruit.lime)
+        favourite_fruit__in=[Fruit.orange, Fruit.lemon, Fruit.lime])
 
 Undefined behaviour
 ===================
