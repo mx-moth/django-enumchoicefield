@@ -8,11 +8,11 @@ EnumChoiceField
 
 .. class:: EnumChoiceField(enum_class, ...)
 
-    Create an EnumChoiceField. This field generates choices from an ``enum.Enum``.
+    Create an EnumChoiceField. This field generates choices from an :class:`enum.Enum`.
 
-    The :class:`EnumChoiceField` extends ``Field``.
+    The :class:`EnumChoiceField` extends :class:`django.db.models.Field`.
     It accepts one additional argument:
-    ``enum_class``, which should be a subclass of :class:`~enum.Enum`.
+    ``enum_class``, which should be a subclass of :class:`enum.Enum`.
     It is recommended that this enum subclasses
     :class:`~enumchoicefield.enum.ChoiceEnum`,
     but this is not required.

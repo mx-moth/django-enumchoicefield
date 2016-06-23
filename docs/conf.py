@@ -33,6 +33,7 @@ import sphinx_rtd_theme
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -106,6 +107,14 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
+
+# -- Interspinx options ---------------------------------------------------
+
+intersphinx_mapping = {
+    'django': ('https://docs.djangoproject.com/en/1.9/',
+               'http://docs.djangoproject.com/en/dev/_objects/'),
+    'python': ('https://docs.python.org/3.5', None),
+}
 
 
 # -- Options for HTML output ----------------------------------------------
