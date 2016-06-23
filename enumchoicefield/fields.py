@@ -27,13 +27,15 @@ class EnumChoiceField(Field):
     not very user friendly. ``PrettyEnum`` makes defining a better ``str``
     representation easy.
 
-    ``enumchoicefield.enum.ChoiceEnum`` combines both ``DeconstructableEnum`` and ``PrettyEnum``
-    into a class that works very nicely with an ``EnumChoiceField``.
+    ``enumchoicefield.enum.ChoiceEnum`` combines both ``DeconstructableEnum``
+    and ``PrettyEnum`` into a class that works very nicely with an
+    ``EnumChoiceField``.
     """
 
     def __init__(self, enum_class, *args, **kwargs):
         self.enum = enum_class
-        kwargs.setdefault('max_length', max(len(item.name) for item in enum_class))
+        kwargs.setdefault('max_length', max(
+            len(item.name) for item in enum_class))
         super(EnumChoiceField, self).__init__(*args, **kwargs)
 
     def from_db_value(self, value, expression, connection, context):

@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms.utils import flatatt
 from django.test import SimpleTestCase
 from django.utils import six
 
@@ -17,8 +18,9 @@ class SelectTestCase(SimpleTestCase):
     def assertSelectOptions(self, html, options, name='choice'):
         if six.PY3:
             # Python3 enums have the correct order of options
-            select = '<select id="id_{name}" name="{name}">{options}</select>'.format(
-                name=name, options=''.join(options))
+            attrs = {'id': 'id_' + name, 'name': name}
+            select = '<select{attrs}>{options}</select>'.format(
+                attrs=flatatt(attrs), options=''.join(options))
             self.assertHTMLEqual(select, html)
         else:
             # Python2 enums have an arbitary order
@@ -116,7 +118,8 @@ class TestComplicatedForm(SelectTestCase):
     def test_valid_form(self):
         form = self.EnumForm(data={'choice': 'foo', 'number': '10'})
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, {'choice': MyEnum.foo, 'number': 10})
+        self.assertEqual(form.cleaned_data, {
+            'choice': MyEnum.foo, 'number': 10})
 
     def test_invalid_number(self):
         form = self.EnumForm(data={'choice': 'bar', 'number': 'abc'})
