@@ -35,6 +35,7 @@ Contents:
    field
    enum
    queries
+   admin
 
 
 
