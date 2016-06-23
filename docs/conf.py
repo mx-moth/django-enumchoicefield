@@ -107,8 +107,8 @@ todo_include_todos = False
 # -- Interspinx options ---------------------------------------------------
 
 intersphinx_mapping = {
-    'django': ('https://docs.djangoproject.com/en/1.9/',
-               'http://docs.djangoproject.com/en/dev/_objects/'),
+    'django': ('https://docs.djangoproject.com/en/dev/',
+               'https://docs.djangoproject.com/en/dev/_objects/'),
     'python': ('https://docs.python.org/3.5', None),
 }
 
