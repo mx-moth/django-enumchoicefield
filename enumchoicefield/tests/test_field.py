@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from enumchoicefield.forms import EnumField
 
-from .models import ChoiceModel, DefaultChoiceModel, MyEnum, NullableChoiceModel
+from .models import (
+    ChoiceModel, DefaultChoiceModel, MyEnum, NullableChoiceModel)
 
 
 class EnumTestCase(TestCase):

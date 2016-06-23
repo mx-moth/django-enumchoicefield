@@ -1,8 +1,7 @@
 from django.test import SimpleTestCase
-
 from django.utils import six
 
-from enumchoicefield.enum import PrettyEnum, DeconstructableEnum
+from enumchoicefield.enum import DeconstructableEnum, PrettyEnum
 
 
 class EnumTests(SimpleTestCase):
