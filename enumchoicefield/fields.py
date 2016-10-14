@@ -80,3 +80,6 @@ class EnumChoiceField(Field):
 
     def get_internal_type(self):
         return "CharField"
+
+    def value_to_string(self, obj):
+        return obj.name

@@ -67,6 +67,11 @@ class EnumTestCase(TestCase):
                 'enum_class': MyEnum,
                 'max_length': 3}))
 
+    def test_value_to_string(self):
+        model_field = ChoiceModel._meta.get_field('choice')
+        string = model_field.value_to_string(MyEnum.bar)
+        self.assertEqual(string, 'bar')
+
     def test_formfield(self):
         model_field = ChoiceModel._meta.get_field('choice')
         form_field = model_field.formfield()
