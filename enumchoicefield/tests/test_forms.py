@@ -1,3 +1,4 @@
+import django
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms.utils import flatatt
@@ -15,10 +16,12 @@ class MyEnum(PrettyEnum):
 
 
 class SelectTestCase(SimpleTestCase):
-    def assertSelectOptions(self, html, options, name='choice'):
+    def assertSelectOptions(self, html, options, required=True, name='choice'):
         if six.PY3:
             # Python3 enums have the correct order of options
             attrs = {'id': 'id_' + name, 'name': name}
+            if django.VERSION >= (1, 10) and required:
+                attrs['required'] = True
             select = '<select{attrs}>{options}</select>'.format(
                 attrs=flatatt(attrs), options=''.join(options))
             self.assertHTMLEqual(select, html)
@@ -86,7 +89,7 @@ class TestOptionalEnumForms(SelectTestCase):
             '<option value="foo">Foo</option>',
             '<option value="bar">Bar</option>',
             '<option value="baz">Baz Quux</option>',
-        ])
+        ], required=False)
 
     def test_initial(self):
         form = self.EnumForm(initial={'choice': MyEnum.bar})
