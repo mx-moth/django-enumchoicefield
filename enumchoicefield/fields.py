@@ -80,3 +80,7 @@ class EnumChoiceField(Field):
 
     def get_internal_type(self):
         return "CharField"
+
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return '' if value is None else value.name

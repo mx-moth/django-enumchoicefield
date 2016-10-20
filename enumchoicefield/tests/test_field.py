@@ -1,3 +1,6 @@
+import json
+
+from django.core import serializers
 from django.test import TestCase
 
 from enumchoicefield.forms import EnumField
@@ -66,6 +69,30 @@ class EnumTestCase(TestCase):
             ('choice', 'enumchoicefield.fields.EnumChoiceField', [], {
                 'enum_class': MyEnum,
                 'max_length': 3}))
+
+    def test_value_to_string(self):
+        model_field = ChoiceModel._meta.get_field('choice')
+
+        self.assertEqual(
+            model_field.value_to_string(ChoiceModel(choice=MyEnum.bar)),
+            'bar')
+        self.assertEqual(
+            model_field.value_to_string(ChoiceModel(choice=None)),
+            '')
+
+    def test_seralize(self):
+        NullableChoiceModel.objects.create(choice=MyEnum.baz)
+        NullableChoiceModel.objects.create(choice=None)
+        serialized = serializers.serialize(
+            'json', NullableChoiceModel.objects.all())
+        self.assertEqual(
+            json.loads(serialized),
+            [
+                {"model": "tests.nullablechoicemodel", "pk": 1, "fields": {
+                    "choice": "baz"}},
+                {"model": "tests.nullablechoicemodel", "pk": 2, "fields": {
+                    "choice": None}},
+            ])
 
     def test_formfield(self):
         model_field = ChoiceModel._meta.get_field('choice')
