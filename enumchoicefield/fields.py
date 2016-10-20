@@ -82,4 +82,5 @@ class EnumChoiceField(Field):
         return "CharField"
 
     def value_to_string(self, obj):
-        return obj.name
+        value = self.value_from_object(obj)
+        return '' if value is None else value.name
