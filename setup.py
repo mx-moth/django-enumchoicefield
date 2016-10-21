@@ -2,8 +2,6 @@
 """
 Install django-enumchoicefield using setuptools
 """
-import sys
-
 from setuptools import find_packages, setup
 
 with open('README.rst', 'r') as f:
@@ -12,12 +10,6 @@ with open('README.rst', 'r') as f:
 with open('enumchoicefield/version.py') as v:
     version = '0.0.0'
     exec(v.read())  # Get version
-
-
-install_requires = ['Django>=1.8']
-
-if sys.version_info < (3, 4):
-    install_requires += ['enum34']
 
 
 setup(
@@ -29,7 +21,7 @@ setup(
     author_email='tim@takeflight.com.au',
     url='https://github.com/takeflight/django-enumchoicefield',
 
-    install_requires=install_requires,
+    install_requires=['Django>=1.8'],
     zip_safe=False,
     license='BSD License',
 
