@@ -29,6 +29,19 @@ The following queries demonstrate some of what is possible:
     citrus_fans = Profile.objects.filter(
         favourite_fruit__in=[Fruit.orange, Fruit.lemon, Fruit.lime])
 
+Ordering
+========
+
+Ordering on a :class:`~enumchoicefield.fields.EnumChoiceField` field
+will order results alphabetically by the ``name``\s  of the enum members,
+which is probably not useful.
+To order results by an enum value,
+:func:`enumchoicefield.utils.order_enum` can be used.
+
+.. module:: enumchoicefield.utils
+
+.. autofunction:: order_enum
+
 Undefined behaviour
 ===================
 
@@ -39,9 +52,3 @@ Any operation that CharFields support are also supported by an
 Not all of these operations make sense,
 such as ``contains``, ``gt``, and ``startswith``,
 and may not behave in a sensible manner.
-
-Ordering on a :class:`~enumchoicefield.fields.EnumChoiceField` field
-will order by the ``name``\s  of the enum members,
-which is probably not useful.
-It is not possible to order results by
-the definition order or the ``value`` of the enum members,

@@ -5,6 +5,7 @@ from enumchoicefield.fields import EnumChoiceField
 
 
 class MyEnum(ChoiceEnum):
+    __order__ = 'foo bar baz'
     foo = "Foo"
     bar = "Bar"
     baz = "Baz Quux"
