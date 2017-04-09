@@ -16,8 +16,13 @@ class EnumSelect(Widget):
         self.members = members
 
     def render(self, name, value, attrs=None):
+        if attrs is None:
+            attrs = {}
+        else:
+            attrs = attrs.copy()
 
-        final_attrs = self.build_attrs(attrs, name=name)
+        attrs['name'] = name
+        final_attrs = self.build_attrs(attrs)
         output = [format_html('<select{}>', flatatt(final_attrs))]
         options = self.render_options([value])
         if options:
