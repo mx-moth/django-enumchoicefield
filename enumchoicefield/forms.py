@@ -1,3 +1,4 @@
+import django
 from django.core.exceptions import ValidationError
 from django.forms.fields import Field
 from django.forms.utils import flatatt
@@ -22,7 +23,10 @@ class EnumSelect(Widget):
             attrs = attrs.copy()
 
         attrs['name'] = name
-        final_attrs = self.build_attrs(attrs)
+        if django.VERSION >= (1, 11):
+            final_attrs = self.build_attrs(self.attrs, attrs)
+        else:
+            final_attrs = self.build_attrs(attrs)
         output = [format_html('<select{}>', flatatt(final_attrs))]
         options = self.render_options([value])
         if options:
