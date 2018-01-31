@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import sys
 
 
@@ -8,12 +9,7 @@ def run():
     from django.conf import settings
     from django.core.management import execute_from_command_line
 
-    settings.configure(
-        DATABASES={'default': {
-            'NAME': ':memory:',
-            'ENGINE': 'django.db.backends.sqlite3'}},
-        INSTALLED_APPS=['enumchoicefield', 'enumchoicefield.tests'])
-    django.setup()
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'enumchoicefield.tests.settings')
     execute_from_command_line([sys.argv[0], 'test'] + sys.argv[1:])
 
 
