@@ -1,36 +1,24 @@
 language: python
 cache: pip
 
-# Matrix of build options
-python:
-  - '2.7'
-  - '3.4'
-  - '3.5'
-
 env:
-  global:
-    - DJANGO_SETTINGS_MODULE="tests.settings"
-    - TOX_ENV=
-  matrix:
-    - DJANGO='18'
-    - DJANGO='19'
-    - DJANGO='110'
-    - DJANGO='111'
+  - DJANGO_SETTINGS_MODULE="tests.settings"
 
 matrix:
   include:
-    - env: TOX_ENV=flake8,isort,docs
+    - env: TOXENV="py27-dj{18,19,110,111}"
+      python: '2.7'
+    - env: TOXENV="py34-dj{18,19,110,111,20}"
+      python: '3.4'
+    - env: TOXENV="py35-dj{18,19,110,111,20}"
       python: '3.5'
+    - env: TOXENV="py36-dj{18,19,110,111,20}"
+      python: '3.6'
+    - env: TOXENV="flake8,isort,docs"
+      python: '3.6'
 
 install:
   - pip install --upgrade pip wheel tox
 
-cache:
-  directories:
-    - $HOME/.cache/pip
-    - $HOME/virtualenv
-
 script:
-  # Run tox using either a specific environment from TOX_ENV,
-  # or building one from the environment variables
-  - tox -e "${TOX_ENV:-py${TRAVIS_PYTHON_VERSION/./}-dj${DJANGO}}"
+  - tox
