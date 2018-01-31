@@ -1,1 +1,2 @@
+-r requirements-test.txt
 tox==2.0.1

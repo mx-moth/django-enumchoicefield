@@ -32,6 +32,8 @@ class EnumChoiceField(Field):
     ``EnumChoiceField``.
     """
 
+    empty_strings_allowed = False
+
     def __init__(self, enum_class, *args, **kwargs):
         self.enum = enum_class
         kwargs.setdefault('max_length', max(
@@ -62,7 +64,10 @@ class EnumChoiceField(Field):
         """
         if value is None:
             return None
-        return value.name
+        if isinstance(value, self.enum):
+            return value.name
+        raise ValueError("Unknown value {value:r} of type {cls}".format(
+            value=value, cls=type(value)))
 
     def deconstruct(self):
         name, path, args, kwargs = super(EnumChoiceField, self).deconstruct()
