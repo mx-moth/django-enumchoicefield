@@ -81,16 +81,17 @@ class EnumTestCase(TestCase):
             '')
 
     def test_seralize(self):
-        NullableChoiceModel.objects.create(choice=MyEnum.baz)
-        NullableChoiceModel.objects.create(choice=None)
+        pk_1 = NullableChoiceModel.objects.create(choice=MyEnum.baz).pk
+        pk_2 = NullableChoiceModel.objects.create(choice=None).pk
+
         serialized = serializers.serialize(
             'json', NullableChoiceModel.objects.all())
         self.assertEqual(
             json.loads(serialized),
             [
-                {"model": "tests.nullablechoicemodel", "pk": 1, "fields": {
+                {"model": "tests.nullablechoicemodel", "pk": pk_1, "fields": {
                     "choice": "baz"}},
-                {"model": "tests.nullablechoicemodel", "pk": 2, "fields": {
+                {"model": "tests.nullablechoicemodel", "pk": pk_2, "fields": {
                     "choice": None}},
             ])
 
