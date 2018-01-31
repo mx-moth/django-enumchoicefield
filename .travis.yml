@@ -1,10 +1,6 @@
 language: python
 cache: pip
 
-services:
-  - postgresql
-  - mysql
-
 matrix:
   include:
     - env: TOXENV="py27-dj{18,19,110,111}"
@@ -19,10 +15,14 @@ matrix:
         TOXENV="py36-dj{111,20}-postgres"
         DATABASE_URL="postgres://postgres@localhost/database"
       python: '3.6'
+      services:
+        - postgresql
     - env: |
         TOXENV="py36-dj{111,20}-mysql"
         DATABASE_URL="mysql://travis@127.0.0.1/database"
       python: '3.6'
+      services:
+        - mysql
     - env: TOXENV="flake8,isort,docs"
       python: '3.6'
 
