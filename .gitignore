@@ -1,6 +1,7 @@
 *.pyc
 *.egg-info
 dist/
+.python-version
 .tox
 venv/
 __pycache__
