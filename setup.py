@@ -18,8 +18,8 @@ setup(
     description='A choice field for Django using native Python Enums',
     long_description=readme,
     author='Tim Heap',
-    author_email='tim@takeflight.com.au',
-    url='https://github.com/takeflight/django-enumchoicefield',
+    author_email='tim@timheap.me',
+    url='https://github.com/timheap/django-enumchoicefield',
 
     install_requires=['Django>=1.8'],
     zip_safe=False,
