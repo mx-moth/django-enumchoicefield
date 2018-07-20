@@ -2,6 +2,13 @@
 Django EnumChoiceField
 ======================
 
+.. image:: https://travis-ci.org/timheap/django-enumchoicefield.svg?branch=master
+    :target: https://travis-ci.org/timheap/django-enumchoicefield
+.. image:: https://readthedocs.org/projects/django-enumchoicefield/badge/?version=latest
+    :target: https://django-enumchoicefield.readthedocs.io/en/latest/
+.. image:: https://badge.fury.io/py/django-enumchoicefield.svg
+    :target: https://pypi.org/project/django-enumchoicefield/
+
 A Django model field for native Python 3.4 Enums.
 
 .. code:: python
