@@ -13,7 +13,7 @@ Enum classes
     To use it, subclass :class:`PrettyEnum` and
     declare the enum members with their human-readable name as their value:
 
-    .. code:: python
+    .. code-block:: python
 
         class Fruit(PrettyEnum):
             apple = "Apple"

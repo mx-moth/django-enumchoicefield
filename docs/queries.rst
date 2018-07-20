@@ -7,7 +7,7 @@ ORM Queries
 You can filter and search for enum members using standard Django ORM queries.
 The following queries demonstrate some of what is possible:
 
-.. code:: python
+.. code-block:: python
 
     from enumchoicefield import ChoiceEnum, EnumChoiceField
 

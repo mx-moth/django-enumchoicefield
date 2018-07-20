@@ -6,7 +6,7 @@ Usage
 
 The following code outlines the most simple usecase of ``EnumChoiceField``:
 
-.. code:: python
+.. code-block:: python
 
     from enumchoicefield import ChoiceEnum, EnumChoiceField
 
