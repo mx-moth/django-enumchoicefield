@@ -36,7 +36,7 @@ class PrettyEnum(enum.Enum):
         self.verbose_name = name
 
     def __str__(self):
-        return self.verbose_name
+        return str(self.verbose_name)
 
 
 class ChoiceEnum(PrettyEnum, DeconstructableEnum):

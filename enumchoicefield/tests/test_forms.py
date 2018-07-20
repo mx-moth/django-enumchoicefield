@@ -3,9 +3,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms.utils import flatatt
 from django.test import SimpleTestCase
-from django.utils import six
+from django.utils import six, translation
+from django.utils.translation import gettext_lazy as _
 
-from enumchoicefield.enum import PrettyEnum
+from enumchoicefield.enum import ChoiceEnum, PrettyEnum
 from enumchoicefield.forms import EnumField, EnumSelect
 
 
@@ -13,6 +14,12 @@ class MyEnum(PrettyEnum):
     foo = "Foo"
     bar = "Bar"
     baz = "Baz Quux"
+
+
+class TranslatedEnum(ChoiceEnum):
+    one = _('One')
+    two = _('Two')
+    three = _('Three')
 
 
 class SelectTestCase(SimpleTestCase):
@@ -203,3 +210,29 @@ class TestEnumField(SelectTestCase):
     def test_to_python_non_member(self):
         with self.assertRaises(ValidationError):
             self.field.to_python('bar')
+
+
+class TestTranslatedChoiceEnum(SelectTestCase):
+
+    class EnumForm(forms.Form):
+        choice = EnumField(TranslatedEnum)
+
+    def test_english(self):
+        with translation.override('en'):
+            form = self.EnumForm()
+            html = six.text_type(form['choice'])
+            self.assertSelectOptions(html, [
+                '<option value="one">One</option>',
+                '<option value="two">Two</option>',
+                '<option value="three">Three</option>',
+            ])
+
+    def test_german(self):
+        with translation.override('de'):
+            form = self.EnumForm()
+            html = six.text_type(form['choice'])
+            self.assertSelectOptions(html, [
+                '<option value="one">Eins</option>',
+                '<option value="two">Zwei</option>',
+                '<option value="three">Drei</option>',
+            ])

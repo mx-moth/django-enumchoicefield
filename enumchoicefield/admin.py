@@ -1,4 +1,5 @@
 from django.contrib.admin.filters import ChoicesFieldListFilter
+from django.utils.translation import gettext_lazy as _
 
 
 class EnumListFilter(ChoicesFieldListFilter):
@@ -24,7 +25,7 @@ class EnumListFilter(ChoicesFieldListFilter):
         yield {
             'selected': self.lookup_val is None,
             'query_string': cl.get_query_string({}, [self.lookup_kwarg]),
-            'display': 'All',
+            'display': _('All'),
         }
         for member in self.enum:
             yield {
