@@ -16,7 +16,7 @@ class EnumSelect(Widget):
         super(EnumSelect, self).__init__(attrs)
         self.members = members
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if attrs is None:
             attrs = {}
         else:
