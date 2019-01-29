@@ -1,5 +1,4 @@
 from django.test import SimpleTestCase
-from django.utils import six
 
 from enumchoicefield.enum import DeconstructableEnum, PrettyEnum
 
@@ -13,22 +12,16 @@ class EnumTests(SimpleTestCase):
             baz = "Baz Quux"
 
         # Ensure names are set
-        self.assertEqual(six.text_type(MyEnum.foo), "Foo")
-        self.assertEqual(six.text_type(MyEnum.bar), "Bar")
-        self.assertEqual(six.text_type(MyEnum.baz), "Baz Quux")
+        self.assertEqual(str(MyEnum.foo), "Foo")
+        self.assertEqual(str(MyEnum.bar), "Bar")
+        self.assertEqual(str(MyEnum.baz), "Baz Quux")
 
         # Ensure values are automatically generated
-        if six.PY3:
-            # In Python3, values are numbered in order
-            self.assertEqual(MyEnum.foo.value, 1)
-            self.assertEqual(MyEnum.bar.value, 2)
-            self.assertEqual(MyEnum.baz.value, 3)
+        self.assertEqual(MyEnum.foo.value, 1)
+        self.assertEqual(MyEnum.bar.value, 2)
+        self.assertEqual(MyEnum.baz.value, 3)
 
-            self.assertEqual(MyEnum(2), MyEnum.bar)
-        else:
-            # In Python2, values are ordered arbitarily
-            self.assertEqual(
-                {1, 2, 3}, set(member.value for member in MyEnum))
+        self.assertEqual(MyEnum(2), MyEnum.bar)
 
     def test_extended_pretty_enum(self):
         class MyEnum(PrettyEnum):
@@ -42,9 +35,9 @@ class EnumTests(SimpleTestCase):
                 self.number = number
 
         # Make sure names still work
-        self.assertEqual(six.text_type(MyEnum.foo), "Foo")
-        self.assertEqual(six.text_type(MyEnum.bar), "Bar")
-        self.assertEqual(six.text_type(MyEnum.baz), "Baz Quux")
+        self.assertEqual(str(MyEnum.foo), "Foo")
+        self.assertEqual(str(MyEnum.bar), "Bar")
+        self.assertEqual(str(MyEnum.baz), "Baz Quux")
 
         # Ensure the extra data is included
         self.assertEqual(MyEnum.foo.number, 10)

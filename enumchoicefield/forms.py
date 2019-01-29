@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.forms.fields import Field
 from django.forms.utils import flatatt
 from django.forms.widgets import Widget
-from django.utils import six
 from django.utils.encoding import force_text
 from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -92,7 +91,7 @@ class EnumField(Field):
     def prepare_value(self, value):
         if value in self.empty_values:
             return self.empty_value
-        if isinstance(value, six.string_types):
+        if isinstance(value, str):
             return value
         return value.name
 
