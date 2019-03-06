@@ -3,7 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms.utils import flatatt
 from django.test import SimpleTestCase
-from django.utils import six, translation
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 from enumchoicefield.enum import ChoiceEnum, PrettyEnum
@@ -24,18 +24,12 @@ class TranslatedEnum(ChoiceEnum):
 
 class SelectTestCase(SimpleTestCase):
     def assertSelectOptions(self, html, options, required=True, name='choice'):
-        if six.PY3:
-            # Python3 enums have the correct order of options
-            attrs = {'id': 'id_' + name, 'name': name}
-            if django.VERSION >= (1, 10) and required:
-                attrs['required'] = True
-            select = '<select{attrs}>{options}</select>'.format(
-                attrs=flatatt(attrs), options=''.join(options))
-            self.assertHTMLEqual(select, html)
-        else:
-            # Python2 enums have an arbitary order
-            for option in options:
-                self.assertInHTML(option, html)
+        attrs = {'id': 'id_' + name, 'name': name}
+        if django.VERSION >= (1, 10) and required:
+            attrs['required'] = True
+        select = '<select{attrs}>{options}</select>'.format(
+            attrs=flatatt(attrs), options=''.join(options))
+        self.assertHTMLEqual(select, html)
 
 
 class TestEnumForms(SelectTestCase):
@@ -49,7 +43,7 @@ class TestEnumForms(SelectTestCase):
 
     def test_rendering(self):
         form = self.EnumForm()
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertSelectOptions(html, [
             '<option value="foo">Foo</option>',
             '<option value="bar">Bar</option>',
@@ -58,7 +52,7 @@ class TestEnumForms(SelectTestCase):
 
     def test_initial(self):
         form = self.EnumForm(initial={'choice': MyEnum.bar})
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertInHTML('<option value="bar" selected>Bar</option>', html)
 
     def test_submission(self):
@@ -90,7 +84,7 @@ class TestOptionalEnumForms(SelectTestCase):
 
     def test_rendering(self):
         form = self.EnumForm()
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertSelectOptions(html, [
             '<option value="">---------</option>',
             '<option value="foo">Foo</option>',
@@ -100,7 +94,7 @@ class TestOptionalEnumForms(SelectTestCase):
 
     def test_initial(self):
         form = self.EnumForm(initial={'choice': MyEnum.bar})
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertInHTML('<option value="bar" selected>Bar</option>', html)
 
     def test_submission(self):
@@ -134,7 +128,7 @@ class TestComplicatedForm(SelectTestCase):
     def test_invalid_number(self):
         form = self.EnumForm(data={'choice': 'bar', 'number': 'abc'})
         self.assertFalse(form.is_valid())
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertSelectOptions(html, [
             '<option value="foo">Foo</option>',
             '<option value="bar" selected>Bar</option>',
@@ -144,7 +138,7 @@ class TestComplicatedForm(SelectTestCase):
     def test_invalid_choice(self):
         form = self.EnumForm(data={'choice': 'nope', 'number': '10'})
         self.assertFalse(form.is_valid())
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertSelectOptions(html, [
             '<option value="foo">Foo</option>',
             '<option value="bar">Bar</option>',
@@ -169,7 +163,7 @@ class TestLimitedMembers(SelectTestCase):
     def test_limited_members(self):
         form = self.EnumForm()
         self.assertEqual(form['choice'].field.members, self.members)
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertSelectOptions(html, [
             '<option value="baz">Baz Quux</option>',
             '<option value="foo">Foo</option>',
@@ -182,7 +176,7 @@ class TestLimitedMembers(SelectTestCase):
     def test_valid_choice(self):
         form = self.EnumForm({'choice': 'baz'})
         self.assertTrue(form.is_valid())
-        html = six.text_type(form['choice'])
+        html = str(form['choice'])
         self.assertSelectOptions(html, [
             '<option value="baz" selected>Baz Quux</option>',
             '<option value="foo">Foo</option>',
@@ -220,7 +214,7 @@ class TestTranslatedChoiceEnum(SelectTestCase):
     def test_english(self):
         with translation.override('en'):
             form = self.EnumForm()
-            html = six.text_type(form['choice'])
+            html = str(form['choice'])
             self.assertSelectOptions(html, [
                 '<option value="one">One</option>',
                 '<option value="two">Two</option>',
@@ -230,7 +224,7 @@ class TestTranslatedChoiceEnum(SelectTestCase):
     def test_german(self):
         with translation.override('de'):
             form = self.EnumForm()
-            html = six.text_type(form['choice'])
+            html = str(form['choice'])
             self.assertSelectOptions(html, [
                 '<option value="one">Eins</option>',
                 '<option value="two">Zwei</option>',

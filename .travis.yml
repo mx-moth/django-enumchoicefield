@@ -3,28 +3,36 @@ cache: pip
 
 matrix:
   include:
-    - env: TOXENV="py27-dj{18,19,110,111}"
-      python: '2.7'
-    - env: TOXENV="py34-dj{18,19,110,111,20}"
+    - env: TOXENV="py34-dj{110,111,20}"
       python: '3.4'
-    - env: TOXENV="py35-dj{18,19,110,111,20}"
+    - env: TOXENV="py35-dj{110,111,20,21}"
       python: '3.5'
-    - env: TOXENV="py36-dj{18,19,110,111,20}"
+    - env: TOXENV="py36-dj{110,111,20,21}"
       python: '3.6'
+    - env: TOXENV="py37-dj{110,111,20,21}"
+      python: '3.7'
+      dist: xenial
+      sudo: true
     - env: |
-        TOXENV="py36-dj{111,20}-postgres"
+        TOXENV="py37-dj{111,20,21}-postgres"
         DATABASE_URL="postgres://postgres@localhost/database"
-      python: '3.6'
+      python: '3.7'
+      dist: xenial
+      sudo: true
       services:
         - postgresql
     - env: |
-        TOXENV="py36-dj{111,20}-mysql"
+        TOXENV="py37-dj{111,20,21}-mysql"
         DATABASE_URL="mysql://travis@127.0.0.1/database"
-      python: '3.6'
+      python: '3.7'
+      dist: xenial
+      sudo: true
       services:
         - mysql
     - env: TOXENV="flake8,isort,docs"
-      python: '3.6'
+      python: '3.7'
+      dist: xenial
+      sudo: true
 
 install:
   - pip install --upgrade pip wheel tox

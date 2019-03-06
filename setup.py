@@ -8,7 +8,7 @@ with open('README.rst', 'r') as f:
     readme = f.read()
 
 with open('enumchoicefield/version.py') as v:
-    version = '0.0.0'
+    version = None
     exec(v.read())  # Get version
 
 
@@ -21,7 +21,7 @@ setup(
     author_email='tim@timheap.me',
     url='https://github.com/timheap/django-enumchoicefield',
 
-    install_requires=['Django>=1.8'],
+    install_requires=['Django>=1.10'],
     zip_safe=False,
     license='BSD License',
 
@@ -35,12 +35,11 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Framework :: Django',
         'License :: OSI Approved :: BSD License',
     ],
