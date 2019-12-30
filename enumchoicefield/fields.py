@@ -40,7 +40,7 @@ class EnumChoiceField(Field):
             len(item.name) for item in enum_class))
         super(EnumChoiceField, self).__init__(*args, **kwargs)
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection):
         """
         Convert a string from the database into an Enum value
         """
