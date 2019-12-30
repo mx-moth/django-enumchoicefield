@@ -31,11 +31,6 @@ def order_enum(field, members):
             .annotate(my_order=order_enum('choice', MyEnum))\\
             .order_by('my_order')
 
-    .. warning:: On Python 2, Enums may not have a consistent order,
-        depending upon how they were defined.
-        You can set an explicit order using ``__order__`` to fix this.
-        See the ``enum34`` docs for more information.
-
     Any enum members not present in the list of members
     will be sorted to the end of the results.
 

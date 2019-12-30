@@ -9,7 +9,7 @@ Django EnumChoiceField
 .. image:: https://badge.fury.io/py/django-enumchoicefield.svg
     :target: https://pypi.org/project/django-enumchoicefield/
 
-A Django model field for native Python 3.4 Enums.
+A Django model field for native Python Enums.
 
 .. code:: python
 
