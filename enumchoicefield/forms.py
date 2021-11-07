@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.forms.fields import Field
 from django.forms.utils import flatatt
 from django.forms.widgets import Widget
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import format_html, mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -34,7 +34,7 @@ class EnumSelect(Widget):
         return mark_safe('\n'.join(output))
 
     def render_options(self, selected_choices):
-        selected_choices = set(map(force_text, selected_choices))
+        selected_choices = set(map(force_str, selected_choices))
         options = []
         if not self.is_required:
             options.append(self.render_option(selected_choices, None))
@@ -48,7 +48,7 @@ class EnumSelect(Widget):
             option_label = '---------'
         else:
             option_value = option.name
-            option_label = force_text(option)
+            option_label = force_str(option)
 
         attrs = {'value': option_value}
         if option_value in selected_choices:
