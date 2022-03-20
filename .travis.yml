@@ -3,34 +3,34 @@ cache: pip
 
 matrix:
   include:
-    - env: TOXENV="py34-dj20"
-      python: '3.4'
-
-    - env: TOXENV="py35-dj{20,21,22}"
-      python: '3.5'
-
     - env: |
-        TOXENV="py36-dj{20,21,22,30}-postgres"
+        TOXENV="py39-dj{2x,3x,4x}-postgres"
         DATABASE_URL="postgres://postgres@localhost/database"
-      python: '3.6'
+      python: '3.9'
       services:
         - postgresql
 
     - env: |
-        TOXENV="py36-dj{20,21,22,30}-mysql"
+        TOXENV="py39-dj{2x,3x,4x}-mysql"
         DATABASE_URL="mysql://travis@127.0.0.1/database"
-      python: '3.6'
+      python: '3.9'
       services:
         - mysql
 
-    - env: TOXENV="py37-dj{20,21,22,30}"
+    - env: TOXENV="py37-dj{2x,3x}"
       python: '3.7'
 
-    - env: TOXENV="py38-dj{22,30}"
+    - env: TOXENV="py38-dj{2x,3x,4x}"
       python: '3.8'
 
+    - env: TOXENV="py38-dj{2x,3x,4x}"
+      python: '3.9'
+
+    - env: TOXENV="py310-dj{3x,4x}"
+      python: '3.10'
+
     - env: TOXENV="flake8,isort,docs"
-      python: '3.8'
+      python: '3.10'
 
 install:
   - pip install --upgrade pip wheel tox
