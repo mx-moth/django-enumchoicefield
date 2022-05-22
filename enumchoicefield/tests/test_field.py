@@ -1,5 +1,6 @@
 import json
 
+from django.db import connections
 from django.core import serializers
 from django.test import TestCase
 
@@ -53,6 +54,23 @@ class EnumTestCase(TestCase):
 
         instance = NullableChoiceModel.objects.get()
         self.assertIsNone(instance.choice)
+
+    def test_invalid_saving(self):
+        msg = "Unknown value {value!r} of type {cls}".format(value='invalid', cls=str)
+        with self.assertRaises(ValueError, msg=msg):
+            ChoiceModel.objects.create(choice='invalid')
+
+    def test_invalid_loading(self):
+        # Bypass the model to save some invalid data to the database
+        cursor = connections['default'].cursor()
+        cursor.execute(
+            f"INSERT INTO {ChoiceModel._meta.db_table} (choice) VALUES (%s)",
+            ['invalid'],
+        )
+
+        msg = "Unknown value {value!r} of type {cls}".format(value='invalid', cls=str)
+        with self.assertRaises(ValueError, msg=msg):
+            ChoiceModel.objects.get()
 
     def test_default(self):
         instance = DefaultChoiceModel()

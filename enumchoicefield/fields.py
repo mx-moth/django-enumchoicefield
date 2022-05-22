@@ -46,7 +46,11 @@ class EnumChoiceField(Field):
         """
         if value is None:
             return value
-        return self.enum[value]
+        try:
+            return self.enum[value]
+        except KeyError:
+            raise ValueError("Unknown value {value!r} of type {cls}".format(
+                value=value, cls=type(value)))
 
     def to_python(self, value):
         """
@@ -66,7 +70,7 @@ class EnumChoiceField(Field):
             return None
         if isinstance(value, self.enum):
             return value.name
-        raise ValueError("Unknown value {value:r} of type {cls}".format(
+        raise ValueError("Unknown value {value!r} of type {cls}".format(
             value=value, cls=type(value)))
 
     def deconstruct(self):
