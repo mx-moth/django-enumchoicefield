@@ -132,6 +132,6 @@ class TestQuery(TestCase):
             ChoiceModel.objects.get(choice=MyEnum.foo))
 
     def test_in(self):
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             ChoiceModel.objects.filter(choice__in=[MyEnum.bar, MyEnum.baz]),
             [self.bar, self.baz], transform=lambda x: x)

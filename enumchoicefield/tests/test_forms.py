@@ -1,4 +1,3 @@
-import django
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms.utils import flatatt
@@ -23,10 +22,18 @@ class TranslatedEnum(ChoiceEnum):
 
 
 class SelectTestCase(SimpleTestCase):
-    def assertSelectOptions(self, html, options, required=True, name='choice'):
-        attrs = {'id': 'id_' + name, 'name': name}
-        if django.VERSION >= (1, 10) and required:
-            attrs['required'] = True
+    def assertSelectOptions(self, html, options, required=True, name='choice', error=False):
+        attrs = {
+            'id': 'id_' + name,
+            'name': name,
+            'required': required,
+        }
+        if error:
+            attrs.update({
+                'aria-describedby': 'id_' + name + '_error',
+                'aria-invalid': 'true',
+            })
+
         select = '<select{attrs}>{options}</select>'.format(
             attrs=flatatt(attrs), options=''.join(options))
         self.assertHTMLEqual(select, html)
@@ -143,7 +150,7 @@ class TestComplicatedForm(SelectTestCase):
             '<option value="foo">Foo</option>',
             '<option value="bar">Bar</option>',
             '<option value="baz">Baz Quux</option>',
-        ])
+        ], error=True)
 
 
 class TestLimitedMembers(SelectTestCase):
